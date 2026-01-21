@@ -1,0 +1,40 @@
+{
+  "name": "tast-manager-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r tsconfig-paths/register ./dist/main.js",
+    "dev": "nodemon",
+    "build": "tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StanNatalia/Tast-manager-backend.git"
+  },
+  "keywords": [],
+  "author": "Stan Natalia <popkids.ua@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/StanNatalia/Tast-manager-backend/issues"
+  },
+  "homepage": "https://github.com/StanNatalia/Tast-manager-backend#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.9",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5",
+    "reflect-metadata": "^0.2.2",
+    "routing-controllers": "^0.11.3"
+  }
+}
