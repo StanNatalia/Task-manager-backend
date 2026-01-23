@@ -8,6 +8,13 @@ const router = Router();
 router.post("/", async (req: Request, res: Response) => {
   const { name } = req.body as { name: string };
 
+  const existingBoard = await Board.findOne({ name });
+  if (existingBoard) {
+    return res
+      .status(400)
+      .json({ message: "Board with this name already exists" });
+  }
+
   const board = await Board.create({
     boardId: generateId(),
     name,
@@ -45,8 +52,22 @@ router.post("/:boardId/:column", async (req: Request, res: Response) => {
   if (!["todo", "inProgress", "done"].includes(column)) {
     return res.status(400).json({ message: "Invalid column" });
   }
+
   const board = await Board.findOne({ boardId });
   if (!board) return res.status(404).json({ message: "Board not found" });
+
+  const allTasks = [
+    ...board.columns.todo,
+    ...board.columns.inProgress,
+    ...board.columns.done,
+  ];
+
+  const duplicate = allTasks.find((t) => t.title === title);
+  if (duplicate) {
+    return res
+      .status(400)
+      .json({ message: "Task with this title already exists" });
+  }
 
   const task: Task = { id: generateId(), title, description };
   board.columns[column].push(task);
@@ -93,11 +114,11 @@ router.delete(
     const board = await Board.findOne({ boardId });
     if (!board) return res.status(404).json({ message: "Board not found" });
     board.columns[column] = board.columns[column].filter(
-      (t) => t.id !== taskId
+      (t) => t.id !== taskId,
     );
     await board.save();
     res.json({ message: "Task deleted" });
-  }
+  },
 );
 
 export default router;

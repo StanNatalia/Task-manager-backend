@@ -15,13 +15,13 @@ export interface IBoard extends Document {
 
 const TaskSchema = new Schema<Task>({
   id: { type: String, required: true },
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   description: { type: String },
 });
 
 const BoardSchema = new Schema<IBoard>({
   boardId: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   columns: {
     todo: [TaskSchema],
     inProgress: [TaskSchema],

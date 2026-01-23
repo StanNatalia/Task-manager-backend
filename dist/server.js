@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const getEnvVar_1 = require("utils/getEnvVar");
 const app_1 = __importDefault(require("./app"));
 const initMongoDB_1 = require("./db/initMongoDB");
-const PORT = process.env.PORT || 3000;
+const port = Number((0, getEnvVar_1.getEnvVar)("PORT", "3000"));
 const startServer = () => {
-    app_1.default.listen(PORT, () => {
-        console.log(`🚀 Server started on port ${PORT}`);
+    app_1.default.listen(port, () => {
+        console.log(`🚀 Server started on port ${port}`);
     });
 };
 const bootstrap = async () => {

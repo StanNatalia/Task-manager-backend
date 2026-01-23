@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { getEnvVar } from "../utils/getEnvVar";
+import logger from "../utils/logger";
 
 export const initMongoDB = async (): Promise<void> => {
   try {
@@ -8,18 +9,15 @@ export const initMongoDB = async (): Promise<void> => {
     const url: string = getEnvVar("MONGODB_URL");
     const db: string = getEnvVar("MONGODB_DB");
 
-    console.log("USER:", user);
-    console.log("PWD:", pwd ? "***" : "empty");
-    console.log("URL:", url);
-    console.log("DB:", db);
+    logger.info({ user, url, db }, "Connecting to MongoDB...");
 
     await mongoose.connect(
-      `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority&appName=Cluster0`
+      `mongodb+srv://${user}:${pwd}@${url}/${db}?appName=kamban`
     );
-    console.log("✅ MongoDB connected!");
+
+    logger.info("✅ MongoDB connected successfully!");
   } catch (e: any) {
-    console.error("❌ Error while setting up mongo connection");
-    console.error(e);
+    logger.error(e, "❌ MongoDB connection error");
     throw e;
   }
 };
