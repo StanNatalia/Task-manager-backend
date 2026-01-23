@@ -36,12 +36,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const TaskSchema = new mongoose_1.Schema({
     id: { type: String, required: true },
-    title: { type: String, required: true },
+    title: { type: String, required: true, unique: true },
     description: { type: String },
 });
 const BoardSchema = new mongoose_1.Schema({
     boardId: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     columns: {
         todo: [TaskSchema],
         inProgress: [TaskSchema],

@@ -9,6 +9,12 @@ const models_1 = __importDefault(require("../models/models"));
 const router = (0, express_1.Router)();
 router.post("/", async (req, res) => {
     const { name } = req.body;
+    const existingBoard = await models_1.default.findOne({ name });
+    if (existingBoard) {
+        return res
+            .status(400)
+            .json({ message: "Board with this name already exists" });
+    }
     const board = await models_1.default.create({
         boardId: (0, generateId_1.generateId)(),
         name,
@@ -37,6 +43,17 @@ router.post("/:boardId/:column", async (req, res) => {
     const board = await models_1.default.findOne({ boardId });
     if (!board)
         return res.status(404).json({ message: "Board not found" });
+    const allTasks = [
+        ...board.columns.todo,
+        ...board.columns.inProgress,
+        ...board.columns.done,
+    ];
+    const duplicate = allTasks.find((t) => t.title === title);
+    if (duplicate) {
+        return res
+            .status(400)
+            .json({ message: "Task with this title already exists" });
+    }
     const task = { id: (0, generateId_1.generateId)(), title, description };
     board.columns[column].push(task);
     await board.save();

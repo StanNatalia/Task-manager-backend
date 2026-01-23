@@ -12,12 +12,12 @@ export const initMongoDB = async (): Promise<void> => {
     logger.info({ user, url, db }, "Connecting to MongoDB...");
 
     await mongoose.connect(
-      `mongodb+srv://${user}:${pwd}@${url}/${db}?appName=kamban`
+      `mongodb+srv://${user}:${pwd}@${url}/${db}?appName=kamban`,
     );
 
-    logger.info("✅ MongoDB connected successfully!");
+    logger.info(" MongoDB connected successfully!");
   } catch (e: any) {
-    logger.error(e, "❌ MongoDB connection error");
+    logger.error(e, " MongoDB connection error");
     throw e;
   }
 };

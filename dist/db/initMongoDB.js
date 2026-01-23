@@ -15,10 +15,10 @@ const initMongoDB = async () => {
         const db = (0, getEnvVar_1.getEnvVar)("MONGODB_DB");
         logger_1.default.info({ user, url, db }, "Connecting to MongoDB...");
         await mongoose_1.default.connect(`mongodb+srv://${user}:${pwd}@${url}/${db}?appName=kamban`);
-        logger_1.default.info("✅ MongoDB connected successfully!");
+        logger_1.default.info(" MongoDB connected successfully!");
     }
     catch (e) {
-        logger_1.default.error(e, "❌ MongoDB connection error");
+        logger_1.default.error(e, " MongoDB connection error");
         throw e;
     }
 };
