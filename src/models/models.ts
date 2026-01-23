@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { BoardColumns, Task } from "types/board.types";
 
 export interface ITask {
   id: string;
@@ -9,22 +10,18 @@ export interface ITask {
 export interface IBoard extends Document {
   boardId: string;
   name: string;
-  columns: {
-    todo: ITask[];
-    inProgress: ITask[];
-    done: ITask[];
-  };
+  columns: BoardColumns;
 }
 
-const TaskSchema: Schema = new Schema({
-  id: { type: String, require: true },
-  title: { type: String, require: true },
+const TaskSchema = new Schema<Task>({
+  id: { type: String, required: true },
+  title: { type: String, required: true },
   description: { type: String },
 });
 
-const BoardSchema: Schema = new Schema({
+const BoardSchema = new Schema<IBoard>({
   boardId: { type: String, required: true, unique: true },
-  name: { type: String, require: true },
+  name: { type: String, required: true },
   columns: {
     todo: [TaskSchema],
     inProgress: [TaskSchema],
@@ -32,4 +29,4 @@ const BoardSchema: Schema = new Schema({
   },
 });
 
-export default mongoose.model<IBoard>("Board", BoardSchema),
+export default mongoose.model<IBoard>("Board", BoardSchema);
