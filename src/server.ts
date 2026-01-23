@@ -1,4 +1,4 @@
-import { getEnvVar } from "utils/getEnvVar";
+import { getEnvVar } from "./utils/getEnvVar";
 import app from "./app";
 import { initMongoDB } from "./db/initMongoDB";
 
@@ -16,7 +16,7 @@ const bootstrap = async () => {
   } catch (err: any) {
     console.error(
       "❌ Failed to start server due to MongoDB error:",
-      err.message
+      err.message,
     );
     process.exit(1);
   }

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { generateId } from "../utils/generateId";
 import Board from "../models/models";
-import { BoardColumns, ColumnType, Task } from "types/board.types";
+import { BoardColumns, ColumnType, Task } from "../types/board.types";
 
 const router = Router();
 
