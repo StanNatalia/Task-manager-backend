@@ -74,6 +74,32 @@ router.put("/:boardId/:column/:taskId", async (req, res) => {
     await board.save();
     res.json(task);
 });
+router.patch("/:boardId/tasks/:taskId/column", async (req, res) => {
+    const { boardId, taskId } = req.params;
+    const { column: newColumn } = req.body;
+    if (!["todo", "inProgress", "done"].includes(newColumn)) {
+        return res.status(400).json({ message: "Invalid column" });
+    }
+    const board = await models_1.default.findOne({ boardId });
+    if (!board)
+        return res.status(404).json({ message: "Board not found" });
+    let task;
+    let oldColumn;
+    for (const col of ["todo", "inProgress", "done"]) {
+        const index = board.columns[col].findIndex((t) => t.id === taskId);
+        if (index !== -1) {
+            task = board.columns[col][index];
+            oldColumn = col;
+            board.columns[col].splice(index, 1);
+            break;
+        }
+    }
+    if (!task)
+        return res.status(404).json({ message: "Task not found" });
+    board.columns[newColumn].push(task);
+    await board.save();
+    res.json({ task, from: oldColumn, to: newColumn });
+});
 router.delete("/:boardId/:column/:taskId", async (req, res) => {
     const { boardId, column, taskId } = req.params;
     const board = await models_1.default.findOne({ boardId });
