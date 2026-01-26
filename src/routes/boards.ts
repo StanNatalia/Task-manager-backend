@@ -5,6 +5,11 @@ import { BoardColumns, ColumnType, Task } from "../types/board.types";
 
 const router = Router();
 
+router.get("/", async (req: Request, res: Response) => {
+  const boards = await Board.find({}, { boardId: 1, name: 1, _id: 0 });
+  res.json(boards);
+});
+
 router.post("/", async (req: Request, res: Response) => {
   const { name } = req.body as { name: string };
 
@@ -22,6 +27,32 @@ router.post("/", async (req: Request, res: Response) => {
   });
 
   res.status(201).json(board);
+});
+
+router.put("/:boardId", async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+  const { name } = req.body as { name: string };
+
+  if (!name || !name.trim()) {
+    return res.status(400).json({ message: "Board name is required" });
+  }
+
+  const existingBoard = await Board.findOne({ name });
+  if (existingBoard && existingBoard.boardId !== boardId) {
+    return res
+      .status(400)
+      .json({ message: "Board with this name already exists" });
+  }
+
+  const board = await Board.findOneAndUpdate(
+    { boardId },
+    { name },
+    { new: true },
+  );
+
+  if (!board) return res.status(404).json({ message: "Board not found" });
+
+  res.json(board);
 });
 
 router.get("/:boardId", async (req: Request, res: Response) => {
