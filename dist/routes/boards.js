@@ -7,6 +7,10 @@ const express_1 = require("express");
 const generateId_1 = require("../utils/generateId");
 const models_1 = __importDefault(require("../models/models"));
 const router = (0, express_1.Router)();
+router.get("/", async (req, res) => {
+    const boards = await models_1.default.find({}, { boardId: 1, name: 1, _id: 0 });
+    res.json(boards);
+});
 router.post("/", async (req, res) => {
     const { name } = req.body;
     const existingBoard = await models_1.default.findOne({ name });
@@ -21,6 +25,23 @@ router.post("/", async (req, res) => {
         columns: { todo: [], inProgress: [], done: [] },
     });
     res.status(201).json(board);
+});
+router.put("/:boardId", async (req, res) => {
+    const { boardId } = req.params;
+    const { name } = req.body;
+    if (!name || !name.trim()) {
+        return res.status(400).json({ message: "Board name is required" });
+    }
+    const existingBoard = await models_1.default.findOne({ name });
+    if (existingBoard && existingBoard.boardId !== boardId) {
+        return res
+            .status(400)
+            .json({ message: "Board with this name already exists" });
+    }
+    const board = await models_1.default.findOneAndUpdate({ boardId }, { name }, { new: true });
+    if (!board)
+        return res.status(404).json({ message: "Board not found" });
+    res.json(board);
 });
 router.get("/:boardId", async (req, res) => {
     const { boardId } = req.params;

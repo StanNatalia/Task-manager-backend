@@ -11,22 +11,27 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const { name } = req.body as { name: string };
+  try {
+    const { name } = req.body as { name: string };
 
-  const existingBoard = await Board.findOne({ name });
-  if (existingBoard) {
-    return res
-      .status(400)
-      .json({ message: "Board with this name already exists" });
+    const existingBoard = await Board.findOne({ name });
+    if (existingBoard) {
+      return res
+        .status(400)
+        .json({ message: "Board with this name already exists" });
+    }
+
+    const board = await Board.create({
+      boardId: generateId(),
+      name,
+      columns: { todo: [], inProgress: [], done: [] },
+    });
+
+    res.status(201).json(board);
+  } catch (err) {
+    console.error("Failed to create board:", err);
+    res.status(500).json({ message: "Server error", error: err });
   }
-
-  const board = await Board.create({
-    boardId: generateId(),
-    name,
-    columns: { todo: [], inProgress: [], done: [] },
-  });
-
-  res.status(201).json(board);
 });
 
 router.put("/:boardId", async (req: Request, res: Response) => {
