@@ -12,19 +12,25 @@ router.get("/", async (req, res) => {
     res.json(boards);
 });
 router.post("/", async (req, res) => {
-    const { name } = req.body;
-    const existingBoard = await models_1.default.findOne({ name });
-    if (existingBoard) {
-        return res
-            .status(400)
-            .json({ message: "Board with this name already exists" });
+    try {
+        const { name } = req.body;
+        const existingBoard = await models_1.default.findOne({ name });
+        if (existingBoard) {
+            return res
+                .status(400)
+                .json({ message: "Board with this name already exists" });
+        }
+        const board = await models_1.default.create({
+            boardId: (0, generateId_1.generateId)(),
+            name,
+            columns: { todo: [], inProgress: [], done: [] },
+        });
+        res.status(201).json(board);
     }
-    const board = await models_1.default.create({
-        boardId: (0, generateId_1.generateId)(),
-        name,
-        columns: { todo: [], inProgress: [], done: [] },
-    });
-    res.status(201).json(board);
+    catch (err) {
+        console.error("Failed to create board:", err);
+        res.status(500).json({ message: "Server error", error: err });
+    }
 });
 router.put("/:boardId", async (req, res) => {
     const { boardId } = req.params;
