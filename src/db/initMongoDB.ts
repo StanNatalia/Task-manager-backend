@@ -9,7 +9,7 @@ export const initMongoDB = async (): Promise<void> => {
     const url: string = getEnvVar("MONGODB_URL");
     const db: string = getEnvVar("MONGODB_DB");
 
-    logger.info({ user, url, db }, "Connecting to MongoDB...");
+    logger.info({ url, db }, "Connecting to MongoDB...");
 
     await mongoose.connect(
       `mongodb+srv://${user}:${pwd}@${url}/${db}?appName=kamban`,

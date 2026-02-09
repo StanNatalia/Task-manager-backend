@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import boardsRouter from "./routes/boards";
+import boardsRouter from "./routes/boards.routes";
+import tasksRouter from "./routes/tasks.routes";
 import logger from "./utils/logger";
 import mongoose from "mongoose";
 
@@ -17,5 +18,6 @@ app.use((req, res, next) => {
 mongoose.set("autoIndex", false);
 
 app.use("/api/boards", boardsRouter);
+app.use("/api/boards/:boardId/tasks", tasksRouter);
 
 export default app;
