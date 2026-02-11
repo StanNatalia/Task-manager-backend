@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as controller from "../controllers/boards.controller";
 import { validateBody } from "../middlewares/validate";
-import { createBoardSchema, updateBoardSchema } from "validation/boards";
+import { createBoardSchema, updateBoardSchema } from "../validation/boards";
 
 const router = Router();
 
