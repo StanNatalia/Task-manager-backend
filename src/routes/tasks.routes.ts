@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as controller from "../controllers/tasks.controller";
-import { validateBody } from "middlewares/validate";
+import { validateBody } from "../middlewares/validate";
 import { createTaskSchema, moveTaskSchema } from "validation/tasks";
 import { updateBoardSchema } from "validation/boards";
 
