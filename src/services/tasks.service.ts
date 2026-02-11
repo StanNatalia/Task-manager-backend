@@ -1,4 +1,4 @@
-import { generateId } from "utils/generateId";
+import { generateId } from "../utils/generateId";
 import * as repo from "../repositories/boards.repository";
 import { ColumnType, Task } from "../types/board.types";
 
