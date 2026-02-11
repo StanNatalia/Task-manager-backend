@@ -1,7 +1,11 @@
 import { Router } from "express";
 import * as controller from "../controllers/tasks.controller";
 import { validateBody } from "../middlewares/validate";
-import { createTaskSchema, moveTaskSchema } from "../validation/tasks";
+import {
+  createTaskSchema,
+  moveTaskSchema,
+  updateTaskSchema,
+} from "../validation/tasks";
 import { updateBoardSchema } from "../validation/boards";
 
 const router = Router({ mergeParams: true });
@@ -9,11 +13,11 @@ const router = Router({ mergeParams: true });
 router.post("/:column", validateBody(createTaskSchema), controller.createTask);
 router.put(
   "/:column/:taskId",
-  validateBody(updateBoardSchema),
+  validateBody(updateTaskSchema),
   controller.updateTask,
 );
 router.patch(
-  "/tasks/:taskId/column",
+  "/:taskId/column",
   validateBody(moveTaskSchema),
   controller.moveTask,
 );
